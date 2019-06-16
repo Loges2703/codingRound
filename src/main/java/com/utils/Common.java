@@ -10,8 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.sun.jna.Platform;
-
 public class Common {
 
 	private static final int TIMEOUT = 60;
@@ -22,7 +20,7 @@ public class Common {
 		this.driver = driver;
 	}
 
-	public void waitFor(By element) {
+	public void waitForElementToBeVisible(By element) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, TIMEOUT, POLLING);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(element));
@@ -45,7 +43,7 @@ public class Common {
 
 	public void clickElement(By by) {
 		try {
-			waitFor(by);
+			waitForElementToBeVisible(by);
 			driver.findElement(by).click();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -54,7 +52,7 @@ public class Common {
 
 	public void switchToFrame(By by) {
 		try {
-			waitFor(by);
+			waitForElementToBeVisible(by);
 			driver.switchTo().frame(driver.findElement(by));
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -64,7 +62,7 @@ public class Common {
 	public String getTextFromElement(By by) {
 		String textFromElement = "No Text";
 		try {
-			waitFor(by);
+			waitForElementToBeVisible(by);
 			textFromElement = driver.findElement(by).getText();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -76,7 +74,7 @@ public class Common {
 
 	public void setValueToTextBox(By by,String value) {
 		try {
-			waitFor(by);
+			waitForElementToBeVisible(by);
 			driver.findElement(by).clear();
 			driver.findElement(by).sendKeys(value);
 		}catch(Exception e) {
@@ -86,7 +84,7 @@ public class Common {
 
 	public void setValueToDropdown(By by,String value) {
 		try {
-			waitFor(by);
+			waitForElementToBeVisible(by);
 			new Select(driver.findElement(by)).selectByVisibleText(value);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -95,7 +93,7 @@ public class Common {
 
 	public void selectOptionFromListUsingIndex(By by,int index) {
 		try {
-			waitFor(by);
+			waitForElementToBeVisible(by);
 			List<WebElement> options = driver.findElements(by);
 			options.get(index).click();
 		}catch(Exception e) {
