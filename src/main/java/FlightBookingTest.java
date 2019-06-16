@@ -1,55 +1,76 @@
-import com.sun.javafx.PlatformUtil;
+import com.sun.jna.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 public class FlightBookingTest {
+	
+	
 
-    WebDriver driver = new ChromeDriver();
+	private static final int TIMEOUT = 60;
+	private static final int POLLING = 500;
+	private static WebDriver driver =null;
+
 
 
     @Test
     public void testThatResultsAppearForAOneWayJourney() {
 
         setDriverPath();
+        driver = new ChromeDriver();
         driver.get("https://www.cleartrip.com/");
-        waitFor(2000);
-        driver.findElement(By.id("OneWay")).click();
-
-        driver.findElement(By.id("FromTag")).clear();
-        driver.findElement(By.id("FromTag")).sendKeys("Bangalore");
+        By onewayradiobutton = By.id("OneWay");
+        waitFor(onewayradiobutton);
+        driver.findElement(onewayradiobutton).click();
+        
+        By fromstationtextbox = By.id("FromTag");
+        waitFor(fromstationtextbox);
+        driver.findElement(fromstationtextbox).clear();
+        driver.findElement(fromstationtextbox).sendKeys("Bangalore");
 
         //wait for the auto complete options to appear for the origin
-
-        waitFor(2000);
-        List<WebElement> originOptions = driver.findElement(By.id("ui-id-1")).findElements(By.tagName("li"));
+        By autocompletefrom = By.id("ui-id-1");
+        waitFor(autocompletefrom);
+        List<WebElement> originOptions = driver.findElement(autocompletefrom).findElements(By.tagName("li"));
         originOptions.get(0).click();
+        
+        By tostationtextbox = By.id("ToTag");
+        waitFor(tostationtextbox);
 
-        driver.findElement(By.id("toTag")).clear();
-        driver.findElement(By.id("toTag")).sendKeys("Delhi");
+        driver.findElement(tostationtextbox).clear();
+        driver.findElement(tostationtextbox).sendKeys("Delhi");
 
         //wait for the auto complete options to appear for the destination
 
-        waitFor(2000);
+        By autocompleteto = By.id("ui-id-2");
+        waitFor(autocompleteto);
         //select the first item from the destination auto complete list
-        List<WebElement> destinationOptions = driver.findElement(By.id("ui-id-2")).findElements(By.tagName("li"));
+        List<WebElement> destinationOptions = driver.findElement(autocompleteto).findElements(By.tagName("li"));
         destinationOptions.get(0).click();
-
-        driver.findElement(By.xpath("//*[@id='ui-datepicker-div']/div[1]/table/tbody/tr[3]/td[7]/a")).click();
+        
+        By datebox = By.xpath("//*[@id='ui-datepicker-div']/div[1]/table/tbody/tr[3]/td[7]/a");
+        waitFor(datebox);
+        driver.findElement(datebox).click();
 
         //all fields filled in. Now click on search
-        driver.findElement(By.id("SearchBtn")).click();
+        By searchbutton = By.id("SearchBtn");
+        waitFor(searchbutton);
+        driver.findElement(searchbutton).click();
 
-        waitFor(5000);
+       
         //verify that result appears for the provided journey search
-        Assert.assertTrue(isElementPresent(By.className("searchSummary")));
+        By searchsummary = By.className("searchSummary");
+        waitFor(searchsummary);
+        Assert.assertTrue(isElementPresent(searchsummary));
 
         //close the browser
         driver.quit();
@@ -57,10 +78,11 @@ public class FlightBookingTest {
     }
 
 
-    private void waitFor(int durationInMilliSeconds) {
+    private void waitFor (By element) {
         try {
-            Thread.sleep(durationInMilliSeconds);
-        } catch (InterruptedException e) {
+        	WebDriverWait wait = new WebDriverWait(driver, TIMEOUT, POLLING);
+    		wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+        } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
@@ -76,13 +98,13 @@ public class FlightBookingTest {
     }
 
     private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
+        if (Platform.isMac()) {
             System.setProperty("webdriver.chrome.driver", "chromedriver");
         }
-        if (PlatformUtil.isWindows()) {
+        if (Platform.isWindows()) {
             System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         }
-        if (PlatformUtil.isLinux()) {
+        if (Platform.isLinux()) {
             System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
         }
     }

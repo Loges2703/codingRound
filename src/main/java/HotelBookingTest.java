@@ -1,14 +1,15 @@
-import com.sun.javafx.PlatformUtil;
+import com.sun.jna.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.Test;
 
 public class HotelBookingTest {
 
-    WebDriver driver = new ChromeDriver();
+    private static WebDriver driver = null;
 
     @FindBy(linkText = "Hotels")
     private WebElement hotelLink;
@@ -25,8 +26,9 @@ public class HotelBookingTest {
     @Test
     public void shouldBeAbleToSearchForHotels() {
         setDriverPath();
-
+        driver = new ChromeDriver();
         driver.get("https://www.cleartrip.com/");
+        PageFactory.initElements(driver, this);
         hotelLink.click();
 
         localityTextBox.sendKeys("Indiranagar, Bangalore");
@@ -39,13 +41,13 @@ public class HotelBookingTest {
     }
 
     private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
+        if (Platform.isMac()) {
             System.setProperty("webdriver.chrome.driver", "chromedriver");
         }
-        if (PlatformUtil.isWindows()) {
+        if (Platform.isWindows()) {
             System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         }
-        if (PlatformUtil.isLinux()) {
+        if (Platform.isLinux()) {
             System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
         }
     }
