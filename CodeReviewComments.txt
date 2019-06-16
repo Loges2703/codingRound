@@ -1,0 +1,43 @@
+Checkin - 1
+1. Changed PlatformUtils to Platform with corresponding dependency.
+2. Driver object has to be created after setting the driver path.
+3. Changed Sleep to Webdriverwait with polling and timeout.
+4. Added frame switching to access the sign in window
+5. Added locators in By variables to use it for wait and action methods.
+6. Added PageFactory Initialization for HotelBooking 
+
+Checkin - 2
+1. Created Utils package for segregating Page objects and reusable methods
+
+Checkin - 3
+1. Added some common methods and implemented them in SignInTest with setup and teardown methods
+
+Checkin - 4
+1. Added some more common methods and implemented the same in HotelBookingTest with setup and teardown methods
+
+Checkin - 5 
+1. Added some more common methods and implemented them in FlightBookingTest with setup and teardown methods
+2. Updated the locators of Autocomplete list
+3. Updated the locator of datebox value.
+
+Checkin - 6 
+1. Removed Unused imports and refactored waitFor method to WaitForElementToBeVisible
+
+List of new classes added
+1. Prerequisite
+2. Common
+3. PageObjects
+
+List of new methods added for reusability
+com.utils.Common.Common(WebDriver)
+com.utils.Common.waitForElementToBeVisible(By)
+com.utils.Common.isElementPresent(By)
+com.utils.Common.navigateToURL(String)
+com.utils.Common.clickElement(By)
+com.utils.Common.switchToFrame(By)
+com.utils.Common.getTextFromElement(By)
+com.utils.Common.setValueToTextBox(By, String)
+com.utils.Common.setValueToDropdown(By, String)
+com.utils.Common.selectOptionFromListUsingIndex(By, int)
+
+
