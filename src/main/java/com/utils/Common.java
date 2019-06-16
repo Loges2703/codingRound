@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sun.jna.Platform;
@@ -56,7 +57,7 @@ public class Common {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getTextFromElement(By by) {
 		String textFromElement = "No Text";
 		try {
@@ -65,10 +66,30 @@ public class Common {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return textFromElement;
-	
+
 	}
+
+	public void setValueToTextBox(By by,String value) {
+		try {
+			waitFor(by);
+			driver.findElement(by).clear();
+			driver.findElement(by).sendKeys("Delhi");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setValueToDropdown(By by,String value) {
+		try {
+			waitFor(by);
+			new Select(driver.findElement(by)).selectByVisibleText(value);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }
 
 
