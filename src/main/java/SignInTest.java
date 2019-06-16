@@ -5,67 +5,42 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.sun.jna.Platform;
+import com.utils.Common;
+import com.utils.Prerequisite;
+import com.utils.PageObjects;
 
 
 public class SignInTest {
 
-	private static final int TIMEOUT = 60;
-	private static final int POLLING = 500;
 	private static WebDriver driver =null;
 
-    @Test
-    public void shouldThrowAnErrorIfSignInDetailsAreMissing() {
+	@BeforeTest
+	public void setUp() {
+		new Prerequisite().setDriverPath();
+		driver = new ChromeDriver();
+	}
 
-        setDriverPath();
-        driver = new ChromeDriver();
-        
-        driver.get("https://www.cleartrip.com/");
-        By yourtripslink =  By.linkText("Your trips");
-        waitFor(yourtripslink);
-        driver.findElement(yourtripslink).click();
-        
-        By signinlink =  By.id("SignIn");
-        waitFor(signinlink);
-        driver.findElement(signinlink).click();
-        
-        By modalwindowframe = By.id("modal_window");
-        waitFor(modalwindowframe);
-        driver.switchTo().frame(driver.findElement(modalwindowframe));
-        
-        By signinbutton =  By.id("signInButton");
-        waitFor(signinbutton);
-        driver.findElement(signinbutton).click();
+	@Test
+	public void shouldThrowAnErrorIfSignInDetailsAreMissing() {        
+		Common common = new Common(driver);
+		common.navigateToURL("https://www.cleartrip.com");
+		common.clickElement(PageObjects.yourTripsLink);
+		common.clickElement(PageObjects.signInLink);
+		common.switchToFrame(PageObjects.modalWindowFrame);
+		common.clickElement(PageObjects.signInButton);
+		String errors1 = common.getTextFromElement(PageObjects.errors);
+		Assert.assertTrue(errors1.contains("There were errors in your submission"));
 
-        By errors = By.id("errors1");
-        waitFor(errors);
-        String errors1 = driver.findElement(errors).getText();
-        Assert.assertTrue(errors1.contains("There were errors in your submission"));
-        driver.quit();
-    }
+	}
 
-    private void waitFor (By element) {
-        try {
-        	WebDriverWait wait = new WebDriverWait(driver, TIMEOUT, POLLING);
-    		wait.until(ExpectedConditions.visibilityOfElementLocated(element));
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-    }
-
-    private void setDriverPath() {
-        if (Platform.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
-        if (Platform.isWindows()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        }
-        if (Platform.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-        }
-    }
-
+	@AfterTest
+	public void tearDown() {
+		driver.quit();
+	}
 
 }

@@ -3,7 +3,7 @@ package com.utils;
 import com.sun.jna.Platform;
 
 public class Prerequisite {
-	  private void setDriverPath() {
+	  public void setDriverPath() {
 	        if (Platform.isMac()) {
 	            System.setProperty("webdriver.chrome.driver", "chromedriver");
 	        }
