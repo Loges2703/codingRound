@@ -1,8 +1,11 @@
 package com.utils;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -75,7 +78,7 @@ public class Common {
 		try {
 			waitFor(by);
 			driver.findElement(by).clear();
-			driver.findElement(by).sendKeys("Delhi");
+			driver.findElement(by).sendKeys(value);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -85,6 +88,16 @@ public class Common {
 		try {
 			waitFor(by);
 			new Select(driver.findElement(by)).selectByVisibleText(value);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void selectOptionFromListUsingIndex(By by,int index) {
+		try {
+			waitFor(by);
+			List<WebElement> options = driver.findElements(by);
+			options.get(index).click();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
